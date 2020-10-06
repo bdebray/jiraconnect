@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Newtonsoft.Json.Linq;
 using JiraWriter.Model;
 
@@ -7,26 +6,20 @@ namespace JiraWriter.Data.Jira
 {
     public static class JiraIssueMapper
     {
-        public static JiraIssue MapJiraIssue(JToken jToken)
+        public static JiraIssue MapJiraIssue(JToken issueJson)
         {
-            var fields = jToken.SelectToken("fields").ToList();
+            var fields = issueJson.SelectToken("fields").ToList();
             var issueSummary = fields.Where(prop => prop.ToObject<JProperty>().Name.Equals("summary")).FirstOrDefault().ToObject<JProperty>().Value.ToString();
+            var labels = fields.Where(prop => prop.ToObject<JProperty>().Name.Equals("labels")).FirstOrDefault().ToObject<JProperty>().Value;
+            var changeLog = issueJson.SelectToken("changelog");
 
-            var jiraIssue = new JiraIssue(jToken["key"].ToString(), issueSummary);
-
-            fields.ForEach(field =>
-            {
-                var property = field.ToObject<JProperty>();
-                jiraIssue.Fields.Add(property.Name, property.Value.ToString());
-            });
+            var jiraIssue = new JiraIssue(issueJson["key"].ToString(), issueSummary);
 
             jiraIssue.Type = fields.Where(prop => prop.ToObject<JProperty>().Name.Equals("issuetype")).FirstOrDefault().ToObject<JProperty>().Value["name"].ToString();
-            jiraIssue.Description = jiraIssue.Fields["summary"];
             jiraIssue.Status = fields.Where(prop => prop.ToObject<JProperty>().Name.Equals("status")).FirstOrDefault().ToObject<JProperty>().Value["name"].ToString();
-            var labels = fields.Where(prop => prop.ToObject<JProperty>().Name.Equals("labels")).FirstOrDefault().ToObject<JProperty>().Value;
             jiraIssue.Labels = labels.Values<string>().ToArray();
-
-            jiraIssue.RawChangelog = jToken.SelectToken("changelog");
+            jiraIssue.RawChangelog = changeLog;
+            jiraIssue.HasMoreChangeHistory = changeLog.SelectToken("maxResults").Value<int>() < changeLog.SelectToken("total").Value<int>();
 
             return jiraIssue;
         }

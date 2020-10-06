@@ -1,7 +1,9 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JiraWriter", "JiraWriter.csproj", "{684FF934-989E-467E-8D40-D318924084B7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JiraWriter", "JiraWriter\JiraWriter.csproj", "{4C1D02EE-86E3-4920-A7AA-F1B4F4183012}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JiraWriterTest", "JiraWriterTest\JiraWriterTest.csproj", "{65B17AE6-39E6-4648-BD59-C5855B8D5616}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,9 +11,13 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{684FF934-989E-467E-8D40-D318924084B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{684FF934-989E-467E-8D40-D318924084B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{684FF934-989E-467E-8D40-D318924084B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{684FF934-989E-467E-8D40-D318924084B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C1D02EE-86E3-4920-A7AA-F1B4F4183012}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C1D02EE-86E3-4920-A7AA-F1B4F4183012}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C1D02EE-86E3-4920-A7AA-F1B4F4183012}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C1D02EE-86E3-4920-A7AA-F1B4F4183012}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65B17AE6-39E6-4648-BD59-C5855B8D5616}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65B17AE6-39E6-4648-BD59-C5855B8D5616}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65B17AE6-39E6-4648-BD59-C5855B8D5616}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65B17AE6-39E6-4648-BD59-C5855B8D5616}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
