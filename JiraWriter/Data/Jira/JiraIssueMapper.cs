@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using Newtonsoft.Json.Linq;
 using JiraWriter.Model;
+using JiraWriter.ErrorHandling;
+using JiraWriter.Extension;
 
 namespace JiraWriter.Data.Jira
 {
@@ -8,18 +10,23 @@ namespace JiraWriter.Data.Jira
     {
         public static JiraIssue MapJiraIssue(JToken issueJson)
         {
-            var fields = issueJson.SelectToken("fields").ToList();
-            var issueSummary = fields.Where(prop => prop.ToObject<JProperty>().Name.Equals("summary")).FirstOrDefault().ToObject<JProperty>().Value.ToString();
-            var labels = fields.Where(prop => prop.ToObject<JProperty>().Name.Equals("labels")).FirstOrDefault().ToObject<JProperty>().Value;
-            var changeLog = issueJson.SelectToken("changelog");
+            if (!issueJson.Children().Any()) throw new InvalidJiraSourceException($"The source data from Jira is an invalid JSON object.");
 
-            var jiraIssue = new JiraIssue(issueJson["key"].ToString(), issueSummary);
+            var fields = issueJson.GetMatchingToken("fields").ToList();
+            var issueKey = issueJson.GetMatchingToken("key").Value<string>();
+            var changeLog = issueJson.GetMatchingToken("changelog");
+            var issueSummary = fields.GetMatchingProperty("summary").Value.ToString();
+            var labels = fields.GetMatchingProperty("labels").Value;
 
-            jiraIssue.Type = fields.Where(prop => prop.ToObject<JProperty>().Name.Equals("issuetype")).FirstOrDefault().ToObject<JProperty>().Value["name"].ToString();
-            jiraIssue.Status = fields.Where(prop => prop.ToObject<JProperty>().Name.Equals("status")).FirstOrDefault().ToObject<JProperty>().Value["name"].ToString();
-            jiraIssue.Labels = labels.Values<string>().ToArray();
-            jiraIssue.RawChangelog = changeLog;
-            jiraIssue.HasMoreChangeHistory = changeLog.SelectToken("maxResults").Value<int>() < changeLog.SelectToken("total").Value<int>();
+            var jiraIssue = new JiraIssue(issueKey, issueSummary)
+            {
+                Type = fields.GetMatchingProperty("issuetype").Value["name"].ToString(),
+                Status = fields.GetMatchingProperty("status").Value["name"].ToString(),
+                Labels = labels.Values<string>().ToArray(),
+                RawChangelogHistories = changeLog?.GetMatchingToken("histories").ToList(),
+
+                HasMoreChangeHistory = changeLog == null || changeLog.GetMatchingToken("maxResults").Value<int>() < changeLog.GetMatchingToken("total").Value<int>()
+            };
 
             return jiraIssue;
         }

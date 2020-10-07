@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using JiraWriter.Data.Jira;
+using JiraWriter.ErrorHandling;
 
 namespace JiraWriterTest
 {
@@ -10,7 +11,7 @@ namespace JiraWriterTest
     public class JiraIssueMapperTest
     {
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [ExpectedException(typeof(InvalidJiraSourceException))]
         public void ShouldFailWithInvalidJson()
         {
             string json = "{}";
@@ -21,14 +22,43 @@ namespace JiraWriterTest
         }
 
         [TestMethod]
-        [ExpectedException(typeof (NullReferenceException))]
-        public void ShouldFailWhenFieldIsMissing()
+        [ExpectedException(typeof(MissingJiraFieldException))]
+        public void ShouldFailWhenIdentifierFieldIsMissing()
+        {
+            string json = @"{
+                'changelog' : {
+                    'maxResults' : 0,
+                    'total': 0,
+                    'histories' : []
+                },
+                'fields' : {
+                    'issuetype' : {
+                        'key' : 'TEST_TYPE_KEY',
+                        'name' : 'TEST TYPE'
+                    },
+                    'status' : {
+                        'key' : 'TEST_STATUS_KEY',
+                        'name' : 'TEST STATUS'
+                    },
+                    'labels' : ['label_1', 'label_2']
+                }
+            }";
+
+            var jsonObject = JObject.Parse(json);
+
+            JiraIssueMapper.MapJiraIssue(jsonObject);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof (MissingJiraFieldException))]
+        public void ShouldFailWhenFieldIsMissingFromFieldList()
         {
             string json = @"{
                 'key' : 'ASTRA-1234',
                 'changelog' : {
                     'maxResults' : 0,
-                    'total': 0
+                    'total': 0,
+                    'histories' : []
                 },
                 'fields' : {
                     'issuetype' : {
@@ -55,7 +85,8 @@ namespace JiraWriterTest
                 'key' : 'ASTRA-1234',
                 'changelog' : {
                     'maxResults' : 0,
-                    'total': 0
+                    'total': 0,
+                    'histories' : []
                 },
                 'fields' : {
                     'summary' : 'TEST_SUMMARY',
@@ -90,7 +121,8 @@ namespace JiraWriterTest
                 'key' : 'ASTRA-1234',
                 'changelog' : {
                     'maxResults' : 1,
-                    'total': 10
+                    'total': 10,
+                    'histories': []
                 },
                 'fields' : {
                     'summary' : 'TEST_SUMMARY',

@@ -38,7 +38,7 @@ namespace JiraWriter
                 }
                 else
                 {
-                    issue.JiraStates = JiraStateMapper.MapStates(issue.RawChangelog.SelectToken("histories").ToList());
+                    issue.JiraStates = JiraStateMapper.MapStates(issue.RawChangelogHistories);
                 }
 
                 issue.Team = _teamMap.TeamName;

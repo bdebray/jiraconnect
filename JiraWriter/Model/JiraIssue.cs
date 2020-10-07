@@ -17,7 +17,7 @@ namespace JiraWriter.Model
         public List<JiraState> JiraStates { get; set; } = new List<JiraState>();
         public List<TimeInState> TimeInStates { get; set; } = new List<TimeInState>();
         public bool HasMoreChangeHistory { get; set; }
-        internal JToken RawChangelog { get; set; }
+        internal List<JToken> RawChangelogHistories { get; set; }
 
         public JiraIssue(string key, string description)
         {
