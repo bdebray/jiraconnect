@@ -14,8 +14,9 @@ namespace JiraWriter
         /// </summary>
         /// <param name="issue"></param>
         /// <param name="stateMaps"></param>
+        /// <param name="excludedDays"></param>
         /// <returns></returns>
-        public static List<TimeInState> GetTimeInStates(JiraIssue issue, IEnumerable<WorkflowMap> stateMaps)
+        public static List<TimeInState> GetTimeInStates(JiraIssue issue, IEnumerable<WorkflowMap> stateMaps, List<DayOfWeek> excludedDays = null)
         {
             var timeInStates = new List<TimeInState>();
             var minDate = DateTime.MinValue;
@@ -29,6 +30,7 @@ namespace JiraWriter
                     : GetMaxStateTransition(issue.JiraStates, map.JiraStates);
 
                 var transitionDate = (state == null) ? DateTime.MinValue : state.TransitionDate;
+                minDate = transitionDate;
 
                 timeInStates.Add(new TimeInState(map.MappedState, transitionDate, map.Sequence));
             });
@@ -47,7 +49,7 @@ namespace JiraWriter
                 var nextDate = (nextState == null) ? DateTime.Today : nextState.Date;
 
                 var oldDaysInState = nextDate.Subtract(timeInState.Date).Days;
-                var daysInState = timeInState.Date.NumberOfDays(nextDate, new List<DayOfWeek> { DayOfWeek.Saturday, DayOfWeek.Sunday });
+                var daysInState = timeInState.Date.NumberOfDays(nextDate, excludedDays);
                 timeInState.DaysInState = daysInState;
             };
 
@@ -84,7 +86,7 @@ namespace JiraWriter
         }
 
         /// <summary>
-        /// Get the max done date for all states that are labeled as the Done state type
+        /// Get the max done date for all states that are labeled as the Done state type, unless the issue is no longer in a Done state
         /// </summary>
         /// <param name="issue"></param>
         /// <param name="stateMaps"></param>
@@ -92,8 +94,11 @@ namespace JiraWriter
         public static DateTime GetDoneDate(JiraIssue issue, IEnumerable<WorkflowMap> stateMaps)
         {
             var doneStateMapsForIssue = stateMaps.Where(map => map.IssueType.Equals(issue.Type) && map.StateType.Equals(StateType.Done)).ToList();
+            var notDoneStateMapsForIssue = stateMaps.Where(map => map.IssueType.Equals(issue.Type) && !map.StateType.Equals(StateType.Done)).ToList();
 
             var doneStateNames = BuildStateNamesArray(doneStateMapsForIssue);
+
+            if (!doneStateNames.Contains(issue.Status)) return DateTime.MinValue;
 
             var maxDoneState = GetMaxStateTransition(issue.JiraStates, doneStateNames);
 

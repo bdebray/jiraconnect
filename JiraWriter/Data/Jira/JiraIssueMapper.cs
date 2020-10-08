@@ -23,10 +23,14 @@ namespace JiraWriter.Data.Jira
                 Type = fields.GetMatchingProperty("issuetype").Value["name"].ToString(),
                 Status = fields.GetMatchingProperty("status").Value["name"].ToString(),
                 Labels = labels.Values<string>().ToArray(),
-                RawChangelogHistories = changeLog?.GetMatchingToken("histories").ToList(),
 
                 HasMoreChangeHistory = changeLog == null || changeLog.GetMatchingToken("maxResults").Value<int>() < changeLog.GetMatchingToken("total").Value<int>()
             };
+
+            if (!jiraIssue.HasMoreChangeHistory)
+            {
+                jiraIssue.JiraStates = JiraStateMapper.MapStates(changeLog?.GetMatchingToken("histories").ToList());
+            }
 
             return jiraIssue;
         }

@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 using JiraWriter.Data.Jira;
 using JiraWriter.ErrorHandling;
 
-namespace JiraWriterTest
+namespace JiraWriterTest.Data.Jira
 {
     [TestClass]
     public class JiraIssueMapperTest

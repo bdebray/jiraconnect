@@ -14,12 +14,13 @@
         {
         }
 
-        public WorkflowMap(string[] jiraState, string mappedState, StateType type, string issueType)
+        public WorkflowMap(string[] jiraState, string mappedState, StateType type, string issueType, int sequence)
         {
             JiraStates = jiraState;
             MappedState = mappedState;
             StateType = type;
             IssueType = issueType;
+            Sequence = sequence;
         }
     }
 }

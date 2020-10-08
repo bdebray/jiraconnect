@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using JiraWriter.Config;
 using JiraWriter.Model;
 using JiraWriter.Data.Jira;
@@ -36,14 +36,10 @@ namespace JiraWriter
                 {
                     issue.JiraStates = _changelogStore.Get(issue.Key);
                 }
-                else
-                {
-                    issue.JiraStates = JiraStateMapper.MapStates(issue.RawChangelogHistories);
-                }
 
                 issue.Team = _teamMap.TeamName;
 
-                issue.TimeInStates = IssueTimeInStateMapper.GetTimeInStates(issue, _teamMap.Workflow);
+                issue.TimeInStates = IssueTimeInStateMapper.GetTimeInStates(issue, _teamMap.Workflow, new List<DayOfWeek> { DayOfWeek.Saturday, DayOfWeek.Sunday });
                 issue.InProgressDate = IssueTimeInStateMapper.GetInProgressDate(issue, _teamMap.Workflow);
                 issue.DoneDate = IssueTimeInStateMapper.GetDoneDate(issue, _teamMap.Workflow);
             });

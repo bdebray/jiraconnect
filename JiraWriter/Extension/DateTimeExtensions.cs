@@ -10,6 +10,8 @@ namespace JiraWriter.Extension
         {
             if (startDate > endDate) return 0;
 
+            if (daysOfWeekToExclude == null) daysOfWeekToExclude = new List<DayOfWeek>();
+
             if (ignoreTime)
             {
                 startDate = new DateTime(startDate.Year, startDate.Month, startDate.Day);
