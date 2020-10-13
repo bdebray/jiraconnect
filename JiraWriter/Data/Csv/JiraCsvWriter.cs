@@ -18,7 +18,7 @@ namespace JiraWriter.Data.Csv
             {
                 var fieldsToWrite = JiraIssueCsvMapper.GetCsvFields(issue);
 
-                csvRecords.Add(fieldsToWrite.BuildCsvObject());
+                csvRecords.Add(fieldsToWrite.ToDynamic());
             });
 
             using (var writer = new StreamWriter(fileNameAndPath))

@@ -5,16 +5,16 @@ namespace JiraWriter.Extension
 {
     public static class DictionaryCsvExtentions
     {
-        public static dynamic BuildCsvObject(this Dictionary<string, object> document)
+        public static dynamic ToDynamic(this Dictionary<string, object> dictionary)
         {
-            dynamic csvObj = new ExpandoObject();
+            dynamic dictionaryObject = new ExpandoObject();
 
-            foreach (var p in document)
+            foreach (var item in dictionary)
             {
-                AddProperty(csvObj, p.Key, p.Value);
+                AddProperty(dictionaryObject, item.Key, item.Value);
             }
 
-            return csvObj;
+            return dictionaryObject;
         }
 
         private static void AddProperty(ExpandoObject expando, string propertyName, object propertyValue)
