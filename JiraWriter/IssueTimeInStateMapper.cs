@@ -106,6 +106,24 @@ namespace JiraWriter
         }
 
         /// <summary>
+        /// Calculates issue cycle time, given that the issue has a set InProgressDate and DoneDate.
+        /// </summary>
+        /// <param name="issue"></param>
+        /// <param name="excludedDays">Excludes any days of the week provided in the calculation.</param>
+        /// <returns></returns>
+        public static int? GetCycleTime(JiraIssue issue, List<DayOfWeek> excludedDays = null)
+        {
+            int? cycleTime = null;
+
+            if (!issue.DoneDate.Equals(DateTime.MinValue) && !issue.InProgressDate.Equals(DateTime.MinValue))
+            {
+                cycleTime = issue.InProgressDate.NumberOfDays(issue.DoneDate, excludedDays);
+            }
+
+            return cycleTime;
+        }
+
+        /// <summary>
         /// Returns the earliest transition to a state (or states if they both represent the same kind of transition on a team board)
         /// </summary>
         /// <param name="states"></param>

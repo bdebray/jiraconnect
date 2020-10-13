@@ -11,6 +11,7 @@ namespace JiraWriter
     {
         protected readonly IIssueStore _issueStore;
         protected readonly IChangelogStore _changelogStore;
+        protected readonly List<DayOfWeek> _weekdaysToExclude = new List<DayOfWeek> { DayOfWeek.Saturday, DayOfWeek.Sunday };
 
         protected readonly TeamMap _teamMap;
 
@@ -19,6 +20,7 @@ namespace JiraWriter
             _issueStore = new IssueStore(jiraConfig);
             _changelogStore = new ChangelogStore(jiraConfig);
             _teamMap = map;
+
         }
 
         public JiraStateWriter(TeamMap teamMap, IIssueStore issueStore, IChangelogStore changelogStore)
@@ -39,9 +41,10 @@ namespace JiraWriter
 
                 issue.Team = _teamMap.TeamName;
 
-                issue.TimeInStates = IssueTimeInStateMapper.GetTimeInStates(issue, _teamMap.Workflow, new List<DayOfWeek> { DayOfWeek.Saturday, DayOfWeek.Sunday });
+                issue.TimeInStates = IssueTimeInStateMapper.GetTimeInStates(issue, _teamMap.Workflow, _weekdaysToExclude);
                 issue.InProgressDate = IssueTimeInStateMapper.GetInProgressDate(issue, _teamMap.Workflow);
                 issue.DoneDate = IssueTimeInStateMapper.GetDoneDate(issue, _teamMap.Workflow);
+                issue.CycleTime = IssueTimeInStateMapper.GetCycleTime(issue, _weekdaysToExclude);
             });
 
             JiraCsvWriter.Write(jiraIssues, _teamMap.OutputFileName);

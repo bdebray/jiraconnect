@@ -6,17 +6,14 @@ namespace JiraWriter.Extension
 {
     public static class DateTimeExtensions
     {
-        public static int NumberOfDays(this DateTime startDate, DateTime endDate, IEnumerable<DayOfWeek> daysOfWeekToExclude = null, bool ignoreTime = true)
+        public static int NumberOfDays(this DateTime startDate, DateTime endDate, IEnumerable<DayOfWeek> daysOfWeekToExclude = null)
         {
             if (startDate > endDate) return 0;
 
             if (daysOfWeekToExclude == null) daysOfWeekToExclude = new List<DayOfWeek>();
 
-            if (ignoreTime)
-            {
-                startDate = new DateTime(startDate.Year, startDate.Month, startDate.Day);
-                endDate = new DateTime(endDate.Year, endDate.Month, endDate.Day);
-            }
+            startDate = new DateTime(startDate.Year, startDate.Month, startDate.Day);
+            endDate = new DateTime(endDate.Year, endDate.Month, endDate.Day);
 
             var tempDate = startDate;
             var numberOfDays = 0;

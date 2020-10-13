@@ -408,5 +408,42 @@ namespace JiraWriterTest
             var target = IssueTimeInStateMapper.GetDoneDate(testIssue, _mockWorkflowMap);
             Assert.AreEqual(DateTime.MinValue, target);
         }
+
+        [TestMethod]
+        public void ShouldGeteCycleTimeForDoneIssue()
+        {
+            var testIssue = new JiraIssue("TEST_KEY", "DESCRIPTION")
+            {
+                InProgressDate = DateTime.Today,
+                DoneDate = DateTime.Today.AddDays(3)
+            };
+
+            var target = IssueTimeInStateMapper.GetCycleTime(testIssue);
+
+            Assert.AreEqual(4, target);
+        }
+
+        [TestMethod]
+        public void ShouldNotGetCycleTimeForIssueStartedButNotDone()
+        {
+            var testIssue = new JiraIssue("TEST_KEY", "DESCRIPTION")
+            {
+                InProgressDate = DateTime.Today
+            };
+
+            var target = IssueTimeInStateMapper.GetCycleTime(testIssue);
+
+            Assert.IsNull(target);
+        }
+
+        [TestMethod]
+        public void ShouldNotGetCycleTimeForIssueNotStarted()
+        {
+            var testIssue = new JiraIssue("TEST_KEY", "DESCRIPTION");
+
+            var target = IssueTimeInStateMapper.GetCycleTime(testIssue);
+
+            Assert.IsNull(target);
+        }
     }
 }

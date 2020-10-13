@@ -15,6 +15,8 @@ namespace JiraWriter.Model
         public DateTime DoneDate { get; set; }
         public List<JiraState> JiraStates { get; set; } = new List<JiraState>();
         public List<TimeInState> TimeInStates { get; set; } = new List<TimeInState>();
+        public int? CycleTime { get; set; }
+
         public bool HasMoreChangeHistory { get; set; }
 
         public JiraIssue(string key, string description)
