@@ -28,6 +28,5 @@ namespace JiraWriter.Extension
                 throw new MissingJiraFieldException($"Jira property, {match}, not found for issue.", exception);
             }
         }
-
     }
 }

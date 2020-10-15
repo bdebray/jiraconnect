@@ -23,5 +23,6 @@
     <Folder Include="Data\Jira\" />
     <Folder Include="Extension\" />
     <Folder Include="Data\Csv\" />
+    <Folder Include="Config\" />
   </ItemGroup>
 </Project>
