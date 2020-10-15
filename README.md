@@ -17,11 +17,11 @@ Jira Connect will need to be configured with the following:
   - **JiraQuery**: Specify the query to be used for this team/organization. The query will include the Jira issues returned from the query in the export.
   - **Enabled**: Determines whether this configured mapping is processed when running the application. This allows setting up a team configuration for future/periodic use.
   - **Workflow**: Provide details how the Jira states should be represented. This is the equivalent of configuring and mapping statuses on a Jira board. Configure the workflow for each state with the following:
-  -- **IssueType**: Specify what Jira Issue type for which this state is used, such as "Story" or "Bug"
-  -- **JiraStates**: Specify one or multiple statuses in Jira that should map to this state configuration.
-  -- **MappedState**: Determines the name of the state that will be displayed in the export and also used for displaying time-in-state calculations. Mapped states should be the same for each issue type (see example below).
-  -- **StateType**: Specify whether this state is a "ToDo", "InProgress", or "Done" state (similar to StatusCategory in Jira. This is used in calculating cycle times.
-  -- **Sequence**: Allows ordering of states from earliest to latest. Numbers should be unique for each state and issue type combination (i.e. "To Do", "Doing", "Done" configuration for an issue type of "Story" could have a sequence of 1, 2, and 3. The same for an issue type of bug can also have a sequence of 1, 2, 3).
+    - **IssueType**: Specify what Jira Issue type for which this state is used, such as "Story" or "Bug"
+    - **JiraStates**: Specify one or multiple statuses in Jira that should map to this state configuration.
+    - **MappedState**: Determines the name of the state that will be displayed in the export and also used for displaying time-in-state calculations. Mapped states should be the same for each issue type (see example below).
+    - **StateType**: Specify whether this state is a "ToDo", "InProgress", or "Done" state (similar to StatusCategory in Jira. This is used in calculating cycle times.
+    - **Sequence**: Allows ordering of states from earliest to latest. Numbers should be unique for each state and issue type combination (i.e. "To Do", "Doing", "Done" configuration for an issue type of "Story" could have a sequence of 1, 2, and 3. The same for an issue type of bug can also have a sequence of 1, 2, 3).
   
   Here is an example of a completed appsettings.json file with a mapping for a team's board and an organization's Epic board:
   
@@ -115,7 +115,7 @@ Jira Connect will need to be configured with the following:
     }
   }
   
-    Consider the following when setting up mappings for each team or organization:
+  Consider the following when setting up mappings for each team or organization:
   - Only map a single "To Do" status (likely the first state on Jira team board)
   - Only map a single "Done" status (likely the last state on Jira board)
   - Make sure all jira statuses are mapped to the same set of "MappedStates" (i.e. Team Awesome Sauce's example above maps to the same "To Do", "In Progress" and "Done" mapped states for both Bug and Story issue types).
@@ -149,7 +149,7 @@ Jira Connect will calculate flow metric data and include it in the export. The d
 - **Flow States**: Each state configured in the workflow mapping will generate a column that displays the date when an issue enters that state.
 - **Time-In-State**: Each state configured in the workflow mapping will generate a column that displays the amount of week days the issue was in that state.
 
-> #### What happens if issues enters the same state multiple times?
+> ### What happens if issues enters the same state multiple times?
 >
 > Even though we encourage preserving flow and not moving issues backwards, it can happen sometimes. Jira Connect will consider the following when determining which dates to use for each state:
 > - Finds the last time it entered a mapped "ToDo" state.
