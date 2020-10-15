@@ -26,94 +26,94 @@ Jira Connect will need to be configured with the following:
   Here is an example of a completed appsettings.json file with a mapping for a team's board and an organization's Epic board:
   
     {
-    "AppSettings": {
-      "JiraConfig": {
-        "ApiKey": "{place api key here}",
-        "BaseUrl": "https://{your-org}.atlassian.net/rest/api/3"
-      },
-      "Mapping": [
-        {
-          "TeamName": "Engineering",
-          "OutputFileName": "Engineering_Epics.csv",
-          "JiraQuery": "project = ENG AND issuetype = 'Epic' AND statusCategory != 'To Do'",
-          "Enabled": true,
-          "Workflow": [
-            {
-              "IssueType": "Epic",
-              "JiraStates": [ "ToDo" ],
-              "MappedState": "To Do",
-              "StateType": "ToDo",
-              "Sequence": 1
-            },
-            {
-              "IssueType": "Epic",
-              "JiraStates": [ "InProgress" ],
-              "MappedState": "Building",
-              "StateType": "InProgress",
-              "Sequence": 2
-            },
-            {
-              "IssueType": "Epic",
-              "JiraStates": [ "Done" ],
-              "MappedState": "Delivered",
-              "StateType": "Done",
-              "Sequence": 3
-            }
-          ]
+      "AppSettings": {
+        "JiraConfig": {
+          "ApiKey": "{place api key here}",
+          "BaseUrl": "https://{your-org}.atlassian.net/rest/api/3"
         },
-        {
-          "TeamName": "Awesome Sauce",
-          "OutputFileName": "AwesomeSauceTeam_Issues.csv",
-          "JiraQuery": "project = AWS AND issuetype IN('Story','Bug') AND statusCategory != 'To Do'",
-          "Enabled": true,
-          "Workflow": [
-            {
-              "IssueType": "Bug",
-              "JiraStates": [ "New" ],
-              "MappedState": "To Do",
-              "StateType": "ToDo",
-              "Sequence": 1
-            },
-            {
-              "IssueType": "Bug",
-              "JiraStates": [ "In Progress" ],
-              "MappedState": "In Progress",
-              "StateType": "InProgress",
-              "Sequence": 2
-            },
-            {
-              "IssueType": "Bug",
-              "JiraStates": [ "Closed" ],
-              "MappedState": "Done",
-              "StateType": "Done",
-              "Sequence": 3
-            },
-            {
-              "IssueType": "Story",
-              "JiraStates": [ "Ready", "New" ],
-              "MappedState": "To Do",
-              "StateType": "ToDo",
-              "Sequence": 1
-            },
-            {
-              "IssueType": "Story",
-              "JiraStates": [ "In Progress" ],
-              "MappedState": "In Progress",
-              "StateType": "InProgress",
-              "Sequence": 2
-            },
-            {
-              "IssueType": "Story",
-              "JiraStates": [ "Accepted" ],
-              "MappedState": "Done",
-              "StateType": "Done",
-              "Sequence": 3
-            }
-          ]
-        }        
-      ]
+        "Mapping": [
+          {
+            "TeamName": "Engineering",
+            "OutputFileName": "Engineering_Epics.csv",
+            "JiraQuery": "project = ENG AND issuetype = 'Epic' AND statusCategory != 'To Do'",
+            "Enabled": true,
+            "Workflow": [
+              {
+                "IssueType": "Epic",
+                "JiraStates": [ "ToDo" ],
+                "MappedState": "To Do",
+                "StateType": "ToDo",
+                "Sequence": 1
+              },
+              {
+                "IssueType": "Epic",
+                "JiraStates": [ "InProgress" ],
+                "MappedState": "Building",
+                "StateType": "InProgress",
+                "Sequence": 2
+              },
+              {
+                "IssueType": "Epic",
+                "JiraStates": [ "Done" ],
+                "MappedState": "Delivered",
+                "StateType": "Done",
+                "Sequence": 3
+              }
+            ]
+          },
+          {
+            "TeamName": "Awesome Sauce",
+            "OutputFileName": "AwesomeSauceTeam_Issues.csv",
+            "JiraQuery": "project = AWS AND issuetype IN('Story','Bug') AND statusCategory != 'To Do'",
+            "Enabled": true,
+            "Workflow": [
+              {
+                "IssueType": "Bug",
+                "JiraStates": [ "New" ],
+                "MappedState": "To Do",
+                "StateType": "ToDo",
+                "Sequence": 1
+              },
+              {
+                "IssueType": "Bug",
+                "JiraStates": [ "In Progress" ],
+                "MappedState": "In Progress",
+                "StateType": "InProgress",
+                "Sequence": 2
+              },
+              {
+                "IssueType": "Bug",
+                "JiraStates": [ "Closed" ],
+                "MappedState": "Done",
+                "StateType": "Done",
+                "Sequence": 3
+              },
+              {
+                "IssueType": "Story",
+                "JiraStates": [ "Ready", "New" ],
+                "MappedState": "To Do",
+                "StateType": "ToDo",
+                "Sequence": 1
+              },
+              {
+                "IssueType": "Story",
+                "JiraStates": [ "In Progress" ],
+                "MappedState": "In Progress",
+                "StateType": "InProgress",
+                "Sequence": 2
+              },
+              {
+                "IssueType": "Story",
+                "JiraStates": [ "Accepted" ],
+                "MappedState": "Done",
+                "StateType": "Done",
+                "Sequence": 3
+              }
+            ]
+          }        
+        ]
+      }
     }
-  }
   
   Consider the following when setting up mappings for each team or organization:
   - Only map a single "To Do" status (likely the first state on Jira team board)
