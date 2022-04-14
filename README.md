@@ -11,7 +11,10 @@ Jira Connect will need to be configured with the following:
   - **BaseURL** (required): Specify your organization's URL for Jira Cloud and append the path to Jira Cloud's REST API. For example: https://{your-org}.atlassian.net/rest/api/3 (replace *your-org*)
   - **ApiKey** (required): Generate an API Key to be used to authenticate with Jira Cloud. Instructions can be found [here](https://confluence.atlassian.com/cloud/api-tokens-938839638.html).
 
-#### 2. Configuring the data to query and the format of the output for one or many organizations/teams. Update the "Mapping" section, adding one entry for each team or organization representation in Jira:
+#### 2. Set the block threshold.
+ - **BlockedDurationMinutesThreshold**: Any time an item is blocked (flagged in Jira) for less than the threshold specified will not be included towards the total BlockedTime.
+
+#### 3. Configuring the data to query and the format of the output for one or many organizations/teams. Update the "Mapping" section, adding one entry for each team or organization representation in Jira:
   - **TeamName**: Specify how the "Team" column in the csv export will be populated.
   - **OutputFileName**: Specify the path and filename for the exported data.
   - **JiraQuery**: Specify the query to be used for this team/organization. The query will include the Jira issues returned from the query in the export.
@@ -31,6 +34,7 @@ Jira Connect will need to be configured with the following:
           "ApiKey": "{place api key here}",
           "BaseUrl": "https://{your-org}.atlassian.net/rest/api/3"
         },
+        "BlockedDurationMinutesThreshold" : 15,
         "Mapping": [
           {
             "TeamName": "Engineering",
@@ -127,19 +131,20 @@ Jira Connect will need to be configured with the following:
   
   Running Jira Connect will result in a csv file for each configured (and enabled) mapping. Each csv file will include the following data:
   
-| Field/Heading           | Description                                                                                                                |
-| ----------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| Key                     | The external identifier used for each issue in Jira                                                                        |
-| Description             | The Summary field for the issue                                                                                            |
-| Type                    | Jira issue type                                                                                                            |
-| Team                    | The "TeamName" specified in the mapping                                                                                    |
-| Status                  | The current status of the Jira issue. The raw value of the status field and not mapped using the configured workflow       |
-| Labels                  | Labels associated with the Jira issue.                                                                                     |
-| InProgressDate          | Calculated date for when the issue entered an "InProgress" state, based on the workflow configured in the mapping          |
-| DoneDate                | Calculated date for when the issue entered a "Done" state, based on the workflow configured in the mapping                 |
-| CycleTime               | The calculated number of days from "InProgressDate" and "DoneDate", excluding weekends                                     |
-| {Flow State Fields}     | A column for each state configured in the workflow mapping, populated with the date that the issue entered the state       |
-| {Time-in-State fields}  | A column for each state configured in the workflow mapping, populated with the calculated number of days spent in the state|
+| Field/Heading | Description |
+| --- | --- |
+| Key                     | The external identifier used for each issue in Jira. |
+| Description             | The Summary field for the issue. |
+| Type                    | Jira issue type. |
+| Team                    | The "TeamName" specified in the mapping. |
+| Status                  | The current status of the Jira issue. The raw value of the status field and not mapped using the configured workflow.  |
+| Labels                  | Labels associated with the Jira issue. |
+| InProgressDate          | Calculated date for when the issue entered an "InProgress" state, based on the workflow configured in the mapping. |
+| DoneDate                | Calculated date for when the issue entered a "Done" state, based on the workflow configured in the mapping. |
+| CycleTime               | The calculated number of days from "InProgressDate" and "DoneDate", excluding weekends. |
+| BlockedTime             | The calculated number of days the item was blocked, based on the Flagged field. The total excludes weekends and blocks less than the threshold. |
+| {Flow State Fields}     | A column for each state configured in the workflow mapping, populated with the date that the issue entered the state. |
+| {Time-in-State fields}  | A column for each state configured in the workflow mapping, populated with the calculated number of days spent in the state. |
 
 ### Calculating Flow Metrics
 
@@ -160,3 +165,4 @@ Jira Connect will calculate flow metric data and include it in the export. The d
 >
 > If we use our example above for team Awesome Sauce, Jira Connect will report on the last time a story entered a "Ready" or "New" status in Jira (which is mapped to our "To Do" state), the first time it entered a status of "In Progress" (as long as it was after the date for the "To Do" state), and the last time it entered the jira status of "Accepted" (mapped to "Done" in our workflow).
 > Jira Connect will also account for issues that have moved all the way through our workflow to a "Done" state and back to a "To Do" state.
+> One note: Jira Connect may not be able to interpret behaviors where issues are moved backwards in a workflow and never re-enter each state again (usually when an item is accidently moved backwards and reverted back to it's original state).

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using JiraWriter.Model;
+using Newtonsoft.Json.Linq;
 
 namespace JiraWriter.Data.Jira
 {
     public interface IChangelogStore
     {
-        List<JiraState> Get(string key);
+        List<JToken> Get(string key);
     }
 }

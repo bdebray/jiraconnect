@@ -29,7 +29,8 @@ namespace JiraWriter.Data.Jira
 
             if (!jiraIssue.HasMoreChangeHistory)
             {
-                jiraIssue.JiraStates = JiraStateMapper.MapStates(changeLog?.GetMatchingToken("histories").ToList());
+                jiraIssue.JiraStates = JiraStateMapper.Map(changeLog?.GetMatchingToken("histories").ToList());
+                jiraIssue.Blocks = JiraBlockMapper.Map(changeLog?.GetMatchingToken("histories").ToList());
             }
 
             return jiraIssue;

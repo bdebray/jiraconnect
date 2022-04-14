@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,5 +25,11 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Insights\BlocksInsightsFinder.cs" />
+    <Compile Remove="Insights\StateChangeInsightsFinder.cs" />
+    <Compile Remove="Insights\InsightsFinder.cs" />
+    <Compile Remove="Data\Jira\JiraChangelogMapper.cs" />
   </ItemGroup>
 </Project>

@@ -9,7 +9,7 @@ namespace JiraWriter.Data.Jira
 {
     public static class JiraStateMapper
     {
-        public static List<JiraState> MapStates(List<JToken> changeLog)
+        public static List<JiraState> Map(List<JToken> changeLog)
         {
             var stateTransitions = new List<JiraState>();
 

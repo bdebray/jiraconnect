@@ -21,6 +21,7 @@ namespace JiraWriter
             try
             {
                 var config = configuration.GetSection("AppSettings").GetSection("JiraConfig").Get<JiraConfig>();
+                config.BlockedDurationMinutesThreshold = configuration.GetSection("AppSettings").GetValue<int>("BlockedDurationMinutesThreshold");
 
                 if (!JiraConfigValidator.IsValid(config)) throw new Exception("Invalid configuration.");
 
@@ -45,7 +46,7 @@ namespace JiraWriter
                         var issueStore = new IssueStore(config);
                         var changelogStore = new ChangelogStore(config);
 
-                        var issueWriter = new JiraStateWriter(map, issueStore, changelogStore);
+                        var issueWriter = new IssueWriter(config, map, issueStore, changelogStore);
                         var issuesToWrite = issueWriter.GetIssues();
 
                         Console.WriteLine($"Found {issuesToWrite.Count} issues for {map.TeamName}...");

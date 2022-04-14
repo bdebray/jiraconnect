@@ -16,8 +16,11 @@ namespace JiraWriter.Model
         public List<JiraState> JiraStates { get; set; } = new List<JiraState>();
         public List<TimeInState> TimeInStates { get; set; } = new List<TimeInState>();
         public int? CycleTime { get; set; }
+        public int? BlockedTime { get; set; }
 
         public bool HasMoreChangeHistory { get; set; }
+
+        public List<Block> Blocks { get; set; } = new List<Block>();
 
         public JiraIssue(string key, string description)
         {

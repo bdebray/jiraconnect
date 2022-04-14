@@ -18,7 +18,8 @@ namespace JiraWriter.Data.Csv
                 { "Labels", string.Join(" | ", issue.Labels) },
                 { "InProgressDate", issue.InProgressDate.ToDisplayDate() },
                 { "DoneDate", issue.DoneDate.ToDisplayDate() },
-                { "CycleTime", issue.CycleTime?.ToString() ?? string.Empty }
+                { "CycleTime", issue.CycleTime?.ToString() ?? string.Empty },
+                { "BlockedTime" , issue.BlockedTime?.ToString() ?? string.Empty }
             };
 
             foreach (var state in issue.TimeInStates)

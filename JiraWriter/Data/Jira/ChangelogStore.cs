@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
-using JiraWriter.Model;
 using JiraWriter.Config;
+using Newtonsoft.Json.Linq;
 
 namespace JiraWriter.Data.Jira
 {
@@ -15,7 +15,7 @@ namespace JiraWriter.Data.Jira
         {
         }
 
-        public List<JiraState> Get(string key)
+        public List<JToken> Get(string key)
         {
             var endpointUri = $"{_config.BaseUrl}/issue/{key}/changelog";
 
@@ -26,7 +26,7 @@ namespace JiraWriter.Data.Jira
 
             var results = Get($"{endpointUri}", options, "values");
 
-            return JiraStateMapper.MapStates(results);
+            return results;
         }
     }
 }

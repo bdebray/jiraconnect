@@ -23,6 +23,25 @@ namespace JiraWriter
 
             var issueTypeStateMaps = stateMaps.Where(map => map.IssueType.Equals(issue.Type)).OrderBy(map => map.Sequence).ToList();
 
+            /*
+             * We need to validate our workflow for known patterns that could cause bad time-in-state results
+             * For example, if we transition between two states, back and forth, in the same day (should be ignored)
+             * If we "reset" by moving an item back to the "To Do" state and restart the workflow (not transitioned on the same day)
+             * TODO: move this to it's own class and allow us to turn it on/off?
+             */           
+            var issueWorkflowCopy = new List<JiraState>(issue.JiraStates);
+
+            issueWorkflowCopy.ForEach(state =>
+            {
+                var reversedState = issueWorkflowCopy.Where(reverse => reverse.ToState.Equals(state.FromState) && reverse.FromState.Equals(state.ToState) && reverse.TransitionDate.Equals(state.TransitionDate)).FirstOrDefault();
+
+                if (reversedState != null)
+                {
+                    issue.JiraStates.Remove(reversedState);
+                    issue.JiraStates.Remove(state);
+                }
+            });
+
             issueTypeStateMaps.ForEach(map =>
             {
                 var state = (map.StateType.Equals(StateType.InProgress))

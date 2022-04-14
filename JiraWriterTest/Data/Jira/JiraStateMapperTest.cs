@@ -58,7 +58,7 @@ namespace JiraWriterTest.Data.Jira
 
             var jsonObject = JObject.Parse(json);
 
-            var target = JiraStateMapper.MapStates(new List<JToken> { jsonObject });
+            var target = JiraStateMapper.Map(new List<JToken> { jsonObject });
 
             Assert.AreEqual(2, target.Count);
             Assert.IsTrue(target.Exists(state => state.FromState.Equals("TEST_READY") && state.ToState.Equals("TEST_DISCOVERY") && state.TransitionDate.Equals(new DateTime(2020, 10, 6))));
@@ -112,7 +112,7 @@ namespace JiraWriterTest.Data.Jira
             var jsonObjectForDayOne = JObject.Parse(jsonForDayOne);
             var jsonObjectForDayTwo = JObject.Parse(jsonForDayTwo);
 
-            var target = JiraStateMapper.MapStates(new List<JToken> { jsonObjectForDayOne, jsonObjectForDayTwo });
+            var target = JiraStateMapper.Map(new List<JToken> { jsonObjectForDayOne, jsonObjectForDayTwo });
 
             Assert.AreEqual(3, target.Count);
             Assert.AreEqual(2, target.FindAll(state => state.TransitionDate.Equals(new DateTime(2020, 10, 6))).Count);
@@ -149,7 +149,7 @@ namespace JiraWriterTest.Data.Jira
 
             var jsonObject = JObject.Parse(json);
 
-            var target = JiraStateMapper.MapStates(new List<JToken> { jsonObject });
+            var target = JiraStateMapper.Map(new List<JToken> { jsonObject });
             Assert.AreEqual(0, target.Count);
         }
 
@@ -164,7 +164,7 @@ namespace JiraWriterTest.Data.Jira
 
             var jsonObject = JObject.Parse(json);
 
-            JiraStateMapper.MapStates(new List<JToken> { jsonObject });
+            JiraStateMapper.Map(new List<JToken> { jsonObject });
         }
 
         [TestMethod]
@@ -188,7 +188,7 @@ namespace JiraWriterTest.Data.Jira
 
             var jsonObject = JObject.Parse(json);
 
-            JiraStateMapper.MapStates(new List<JToken> { jsonObject });
+            JiraStateMapper.Map(new List<JToken> { jsonObject });
         }
     }
 }
